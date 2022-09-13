@@ -1,7 +1,8 @@
+/* eslint-disable */
 /**
  * @module AgoraUIKit
  */
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import RtcConfigure from './RTCConfigure';
 import {PropsProvider, PropsInterface, layout} from './PropsContext';
@@ -14,6 +15,9 @@ import PinnedVideo from './PinnedVideo';
  * @param props {@link PropsInterface}
  */
 const AgoraUIKit: React.FC<PropsInterface> = (props) => {
+  const [showVideo, setShowVideo] = useState(true);
+  const toggleVideo = () => setShowVideo((prev) => !prev);
+
   return (
     <PropsProvider value={props}>
       <View style={props.styleProps?.UIKitContainer}>
@@ -21,9 +25,17 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
           {props.rtcProps?.layout === layout.grid ? (
             <GridVideo />
           ) : (
-            <PinnedVideo />
+            <PinnedVideo showVideo={showVideo} />
           )}
-          <LocalControls showButton={props.rtcProps.layout !== layout.grid} />
+          <LocalControls
+            encounterData={props.encounterData}
+            showButton={props.rtcProps.layout !== layout.grid}
+            renderMessageButton={props.renderMessageButton}
+            showBottomButtons={props.showBottomButtons}
+            patientCard={props.patientCard}
+            setShowVideo={toggleVideo}
+            showVideo={showVideo}
+          />
         </RtcConfigure>
       </View>
     </PropsProvider>

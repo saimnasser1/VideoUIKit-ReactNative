@@ -284,6 +284,7 @@ export interface PropsInterface {
    * Callbacks for different functions of the UI Kit
    */
   callbacks?: Partial<CallbacksInterface>;
+  showVideo: boolean
 }
 
 /**
@@ -329,6 +330,7 @@ const initialValue: PropsInterface = {
     appId: '',
     channel: '',
   },
+  showVideo:true
 };
 
 const PropsContext = React.createContext<PropsInterface>(initialValue);

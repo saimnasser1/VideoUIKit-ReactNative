@@ -1,34 +1,52 @@
-import React, {useContext} from 'react';
-import {View} from 'react-native';
+import React, { useContext } from 'react';
+import { View, TouchableOpacity, Block, Text } from 'react-native';
 import styles from '../Style';
 import EndCall from './Local/EndCall';
 import LocalAudioMute from './Local/LocalAudioMute';
 import LocalVideoMute from './Local/LocalVideoMute';
 import SwitchCamera from './Local/SwitchCamera';
-import RemoteControls from './RemoteControls';
-import {MaxUidConsumer} from '../MaxUidContext';
-import PropsContext, {role} from '../PropsContext';
+import PropsContext, { role } from '../PropsContext';
 import LocalUserContextComponent from '../LocalUserContext';
+import CountDown from 'react-native-countdown-component';
+import { MaxUidConsumer } from '../MaxUidContext';
+import RemoteControls from './RemoteControls';
 
-function Controls(props: {showButton: Boolean}) {
-  const {styleProps, rtcProps} = useContext(PropsContext);
-  const {localBtnContainer, maxViewRemoteBtnContainer} = styleProps || {};
-  const showButton = props.showButton !== undefined ? props.showButton : true;
+function Controls(props) {
+  const { styleProps, rtcProps } = useContext(PropsContext);
+  const { localBtnContainer, maxViewRemoteBtnContainer } = styleProps || {};
+  const { showButton, encounterData, renderMessageButton, showBottomButtons, patientCard,showVideo, setShowVideo} = props;
+
   return (
+
     <LocalUserContextComponent>
-      <View style={{...styles.Controls, ...(localBtnContainer as object)}}>
+
+      {showButton && showBottomButtons ? (
+        <View
+          style={{
+            ...styles.Controls,
+            bottom: styles.Controls.bottom + 70,
+            ...(maxViewRemoteBtnContainer as object),
+          }}>
+          {encounterData.userRole === 'ROLE_DOCTOR' && patientCard?.()}
+        </View>
+      ) : (
+        <></>
+      )}
+
+      <View style={{ ...styles.Controls, ...(localBtnContainer as object) }}>
         {rtcProps.role === role.Audience ? (
           <EndCall />
-        ) : (
+        ) : showBottomButtons ? (
           <>
             <LocalAudioMute />
-            <LocalVideoMute />
-            <SwitchCamera />
+            <LocalVideoMute  setShowVideo={setShowVideo} />
             <EndCall />
+            <SwitchCamera />
+            {renderMessageButton?.()}
           </>
-        )}
+        ) : (<></>)}
       </View>
-      {showButton ? (
+      {/* {showButton ? (
         <MaxUidConsumer>
           {(users) => (
             <View
@@ -43,9 +61,11 @@ function Controls(props: {showButton: Boolean}) {
         </MaxUidConsumer>
       ) : (
         <></>
-      )}
+      )} */}
     </LocalUserContextComponent>
   );
 }
 
 export default Controls;
+
+
