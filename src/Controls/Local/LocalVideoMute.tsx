@@ -12,7 +12,7 @@ function LocalVideoMute(props) {
   const {dispatch} = useContext(RtcContext);
   const local = useContext(LocalContext);
   const { setShowVideo } = props
-
+console.log('====>', setShowVideo)
   return (
     <BtnTemplate
       name={local.video ? 'videocam' : 'videocamOff'}
@@ -31,5 +31,3 @@ function LocalVideoMute(props) {
 }
 
 export default LocalVideoMute;
-
-

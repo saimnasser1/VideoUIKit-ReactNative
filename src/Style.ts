@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   max: {
     flex: 1,
+
   },
   buttonHolder: {
     height: 100,

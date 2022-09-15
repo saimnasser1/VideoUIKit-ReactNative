@@ -1,16 +1,16 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Dimensions, ScrollView, View} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Dimensions, ScrollView, View } from 'react-native';
 import MaxVideoView from './MaxVideoView';
 import MinVideoView from './MinVideoView';
-import {MinUidConsumer} from './MinUidContext';
-import {MaxUidConsumer} from './MaxUidContext';
+import { MinUidConsumer } from './MinUidContext';
+import { MaxUidConsumer } from './MaxUidContext';
 import styles from './Style';
 // import LocalControls from './Controls/LocalControls';
-import PropsContext, {role} from './PropsContext';
+import PropsContext, { role } from './PropsContext';
 
-const PinnedVideo: React.FC<any> = (props) => {
-  const {showVideo} = props;
-  const {rtcProps, styleProps} = useContext(PropsContext);
+const PinnedVideo: React.FC<any> = props => {
+  const { showVideo } = props;
+  const { rtcProps, styleProps } = useContext(PropsContext);
   const [width, setWidth] = useState(Dimensions.get('screen').width);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const PinnedVideo: React.FC<any> = (props) => {
   return (
     <>
       <MaxUidConsumer>
-        {(maxUsers) =>
+        {maxUsers =>
           maxUsers[0] ? ( // check if audience & live don't render if uid === local
             <MaxVideoView user={maxUsers[0]} key={maxUsers[0].uid} />
           ) : null
@@ -39,10 +39,9 @@ const PinnedVideo: React.FC<any> = (props) => {
             ...(styleProps?.minViewContainer as Object),
           }}>
           <MinUidConsumer>
-            {(minUsers) =>
-              minUsers.map((user) =>
-                rtcProps.role === role.Audience &&
-                user.uid === 'local' ? null : (
+            {minUsers =>
+              minUsers.map(user =>
+                rtcProps.role === role.Audience && user.uid === 'local' ? null : (
                   <MinVideoView user={user} key={user.uid} showOverlay={true} />
                 ),
               )
